@@ -23,13 +23,12 @@ class EventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50|unique:event,name,' . $this->event,
+            'name' => 'required|string|max:50|unique:events,name,' . $this->events,
             'description' => 'nullable|string|max:500',
             'date_start' => 'required|date|after_or_equal:today',
             'date_end' => 'required|date|after_or_equal:date_start',
             'location' => 'required|string|max:250',
-            'max_slots' => 'required|integer|max:5',
-            'occupied_slots' => 'nullable|integer|max:5',
+            'max_slots' => 'required|integer|max:500',
             'status' => 'required|boolean',
         ];
     }

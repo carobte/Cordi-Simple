@@ -16,25 +16,26 @@ class EventController extends Controller
         //
     }
 
-//Controllers for Create a New event
+    //Controllers for Create a New event
 
 
-public function create()
-{
-    //Show the Create form
-    return view('events.create');
-}
+    public function create()
+    {
+        //Show the Create form
+        return view('events.create');
+    }
 
-Public Function Store(EventRequest $request)
-{
-    $validatedData = $request->validated();
+    public function Store(EventRequest $request)
+    {
+        $validatedData = $request->validated();
+        $validatedData['occupied_slots'] = 0; // Asegúrate de usar el mismo array
 
-    // Create category with validated data
-    Event::create($validatedData);
-    
-    // Redirect to the category list with a message
-    return redirect()->route('events.index')->with('success', 'event created successfully.');
-}
+        // Crea el evento con los datos validados
+        Event::create($validatedData);
+
+        // Redirige a la lista de eventos con un mensaje
+        return redirect()->route('events.index')->with('success', 'event created successfully.');
+    }
 
     /**
      * Display the specified resource.
