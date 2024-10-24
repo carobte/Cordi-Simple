@@ -1,3 +1,108 @@
+# CordiSimple 
+
+CordiSimple is an event management system 
+
+## Prerequisites
+
+Before starting, make sure you have the following tools installed on your system:
+
+- [PHP](https://www.php.net/downloads.php) >= 8.0
+- [Composer](https://getcomposer.org/)
+- [Node.js](https://nodejs.org/)
+- [MySQL](https://www.mysql.com/) or another compatible database system
+- [Git](https://git-scm.com/)
+
+## Installation
+
+Follow these steps to set up the project locally.
+
+### 1. Clone the repository
+
+<code>
+- git clone https://github.com/carobte/Cordi-Simple
+<br>
+- cd Cordi-Simple
+</code>
+
+### 2. Install PHP dependencies
+
+Run the following command to install the PHP dependencies:
+
+<code>
+composer install
+</code>
+
+### 3. Install JavaScript dependencies
+
+Run the following command to install frontend dependencies:
+
+<code>
+npm install
+</code>
+
+### 4. Configure the `.env` file
+
+Edit the `.env` file to configure your database and other necessary values, remember they are on the discord channel.
+
+<code>
+DB_CONNECTION=mysql <br>
+DB_HOST=127.0.0.1 <br>
+DB_PORT=3306 <br>
+DB_DATABASE=database_name <br>
+DB_USERNAME=username <br>
+DB_PASSWORD=password <br>
+</code>
+
+### 5. Compile assets
+
+To compile CSS and JavaScript files, run:
+
+<code>
+npm run dev
+</code>
+
+Or for production build:
+
+<code>
+npm run build
+</code>
+
+### 8. Start the development server
+
+Run the following command to start the local server:
+
+<code>
+php artisan serve
+</code>
+
+The server will start at `http://localhost:8000`.
+
+## Authentication with Breeze
+
+This project uses **Laravel Breeze** to handle basic authentication features like registration, login, and password resets.
+
+For more details on Laravel Breeze, refer to the [official documentation](https://laravel.com/docs/10.x/starter-kits#breeze).
+
+## Useful Commands
+
+Here are some additional commands that might be useful during development:
+
+- **Migrate and seed the database**:
+  <code>
+  php artisan migrate --seed
+  </code>
+
+## Authors: 
+
+- [Carolina Bustamante](https://www.github.com/carobte)
+- [Jonathan Escobar Molina](https://www.github.com/JEscobar07)
+- [Simón Arias Saldarriaga](https://www.github.com/SimonArias77)
+- [Luis Alejandro Londoño Valle](https://www.github.com/valeria2508)
+
+<br>
+
+# Project made with Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
