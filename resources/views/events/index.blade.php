@@ -40,7 +40,7 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $event->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $event->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $event->description }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($event->description) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $event->date_start }}</td>
                         <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $event->date_end }}</td>
                         <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $event->location }}</td>
