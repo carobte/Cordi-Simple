@@ -13,14 +13,14 @@ class Event extends Model
     public $timestamps = true;
     // Define qué campos se pueden llenar automáticamente
     protected $fillable = [
-        "name",
-        "description",
-        "date_start",
-        "date_end",
-        "location",
-        "max_slots",
-        "occupied_slots",
-        "status"
+        'name',
+        'description',
+        'date_start',
+        'date_end',
+        'location',
+        'max_slots',
+        'occupied_slots',
+        'status'
     ];
 
 }
