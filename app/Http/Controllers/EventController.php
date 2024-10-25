@@ -28,12 +28,8 @@ class EventController extends Controller
     public function Store(EventRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData['occupied_slots'] = 0; // Asegúrate de usar el mismo array
-
-        // Crea el evento con los datos validados
+        $validatedData['occupied_slots'] = 0; 
         Event::create($validatedData);
-
-        // Redirige a la lista de eventos con un mensaje
         return redirect()->route('events.index')->with('success', 'event created successfully.');
     }
 
@@ -50,9 +46,7 @@ class EventController extends Controller
      */
     public function edit(string $id)
     {
-        // Obtenemos el evento por ID
         $event = Event::findOrFail($id);
-        // Retornamos la vista para editar el evento
         return view('events.edit', compact('event'));
     }
 
@@ -66,7 +60,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $event->update($validatedData);
 
-        return redirect()->route('events.create')->with('success', 'Evento actualizado exitosamente.');
+        return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
     }
 
     /**
