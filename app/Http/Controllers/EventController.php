@@ -31,6 +31,7 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $validatedData['occupied_slots'] = 0; 
         Event::create($validatedData);
+        
         return redirect()->route('events.index')->with('success', 'event created successfully.');
     }
 
@@ -70,6 +71,9 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $event = Event::find($id);
+        $event->delete();
+        return redirect()->route("events.index")->with('success', 'Event eliminada con exito.');
     }
+
 }
