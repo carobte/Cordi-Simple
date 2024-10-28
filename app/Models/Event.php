@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Event extends Model
 {
-    
+
     protected $table = "events";
     public $timestamps = true;
     // Define qué campos se pueden llenar automáticamente
