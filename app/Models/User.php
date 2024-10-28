@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rols_id'
     ];
 
     /**
@@ -45,4 +46,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function rol(): BelongsTo
+    {
+        return $this->belongsTo(Rol::class, 'rol_id', 'id');
+    }
+
+
 }
