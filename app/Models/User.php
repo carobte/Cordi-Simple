@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -53,5 +54,9 @@ class User extends Authenticatable
         return $this->belongsTo(Rol::class, 'rols_id', 'id');
     }
 
+    public function reservation(): HasMany
+    {
+        return $this->hasMany(Reservation::class, 'user_id', 'id');
+    }
 
 }
