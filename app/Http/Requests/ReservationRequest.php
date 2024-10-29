@@ -23,7 +23,7 @@ class ReservationRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer|exists:reservations,id',
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id' => 'nullable|integer|exists:users,id',
             'event_id' => 'required|integer|exists:events,id',
             'status' => 'required|boolean',
             'created_at' => 'nullable|date',
@@ -36,7 +36,6 @@ class ReservationRequest extends FormRequest
         return [
             'id.integer' => 'El ID debe ser un número entero.',
             'id.exists' => 'El ID no existe en la base de datos.',
-            'user_id.required' => 'El ID del usuario es obligatorio.',
             'user_id.integer' => 'El ID del usuario debe ser un número entero.',
             'user_id.exists' => 'El usuario no existe en la base de datos.',
             'event_id.required' => 'El ID del evento es obligatorio.',

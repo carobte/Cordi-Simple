@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -14,7 +15,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        $reservations = Reservation::all();
+        return view('reservations.index', compact("reservations"));
     }
 
     /**
@@ -27,19 +29,25 @@ class ReservationController extends Controller
 
     public function store(ReservationRequest $request)
     {
-        $validatedData = $request->validated();
-
-       // Get the event using the ID provided in the request
-        $event = Event::find($validatedData['event_id']);
-
-        // Check if the event exists and its state
-        if ($event->status == 0) {
-            return redirect()->back()->withErrors(['event_id' => 'El evento no está activo.'])->withInput();
+        // Verificar si el usuario está logueado
+        if (!Auth::check()) {
+            return redirect()->back()->withErrors(['login' => 'Debes estar logueado para hacer una reserva.'])->withInput();
         }
-
-        // If the event is active, create the reservation
+    
+        $validatedData = $request->validated();
+    
+        // Obtener el evento utilizando el ID proporcionado en la solicitud
+        $event = Event::find($validatedData['event_id']);
+    
+        // Verificar si el evento existe y su estado
+        if (!$event || $event->status == 0) {
+            return redirect()->back()->withErrors(['event_id' => 'El evento no está activo o no existe.'])->withInput();
+        }
+    
+        // Asignar el ID del usuario autenticado en el array
+        $validatedData['user_id'] = Auth::id();
         Reservation::create($validatedData);
-
+    
         return redirect()->route('reservations.index')->with('success', 'Reservación creada exitosamente.');
     }
 
