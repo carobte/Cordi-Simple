@@ -35,14 +35,6 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('success', 'event created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $event = Event::findOrFail($id);
-        return view('events.show', compact("event") );
-    }
 
     /**
      * Show the form for editing the specified resource.
