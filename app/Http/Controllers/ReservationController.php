@@ -22,33 +22,26 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('reservations.create');
+        // Captura el ID del evento de la solicitud
+        $eventId = $request->input('event_id');
+
+        // Obtén el usuario autenticado
+        $user = Auth::user(); // Esto te dará un objeto con toda la información del usuario
+
+        // Carga el evento usando el ID
+        $event = Event::find($eventId);
+
+        // Retorna la vista con el evento y el usuario
+        return view('reservations.create', compact('event', 'user'));
     }
 
     public function store(ReservationRequest $request)
     {
-        // Verificar si el usuario está logueado
-        if (!Auth::check()) {
-            return redirect()->back()->withErrors(['login' => 'Debes estar logueado para hacer una reserva.'])->withInput();
-        }
-    
         $validatedData = $request->validated();
-    
-        // Obtener el evento utilizando el ID proporcionado en la solicitud
-        $event = Event::find($validatedData['event_id']);
-    
-        // Verificar si el evento existe y su estado
-        if (!$event || $event->status == 0) {
-            return redirect()->back()->withErrors(['event_id' => 'El evento no está activo o no existe.'])->withInput();
-        }
-    
-        // Asignar el ID del usuario autenticado en el array
-        $validatedData['user_id'] = Auth::id();
         Reservation::create($validatedData);
-    
-        return redirect()->route('reservations.index')->with('success', 'Reservación creada exitosamente.');
+        return redirect()->route('events.index')->with('success', 'Reservación creada exitosamente.');
     }
 
     /**
