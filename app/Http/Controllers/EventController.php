@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -40,10 +41,19 @@ class EventController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        $event = Event::findOrFail($id);
-        return view('events.edit', compact('event'));
+{
+    $event = Event::findOrFail($id);
+    
+    // Asegúrate de convertir las fechas a Carbon
+    if (is_string($event->date_start)) {
+        $event->date_start = Carbon::parse($event->date_start);
     }
+    if (is_string($event->date_end)) {
+        $event->date_end = Carbon::parse($event->date_end);
+    }
+
+    return view('events.edit', compact('event'));
+}
 
     /**
      * Update the specified resource in storage.

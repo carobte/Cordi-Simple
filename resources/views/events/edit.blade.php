@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Actualizar un nuevo evento</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Actualizar Evento</h1>
 
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <form action="{{ route('events.update', $event->id) }}" method="POST" class="px-8 py-8" id="event-edit-form">
@@ -10,7 +10,7 @@
                 @method('PUT')
 
                 <div class="mb-4">
-                    <label for="name" class="block text-gray-700 font-bold mb-2">Nombre del evento:</label>
+                    <label for="name" class="block text-gray-700 font-bold mb-2">Nombre del Evento:</label>
                     <input type="text" name="name" id="name"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                         value="{{ old('name', $event->name) }}" required>
@@ -33,7 +33,7 @@
                     <label for="date_start" class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
                     <input type="date" name="date_start" id="date_start"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                        value="{{ old('date_start', $event->date_start) }}" required>
+                        value="{{ old('date_start', $event->date_start ? $event->date_start->format('Y-m-d') : '') }}" required>
                     @error('date_start')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -43,7 +43,7 @@
                     <label for="date_end" class="block text-gray-700 font-bold mb-2">Fecha de Finalización:</label>
                     <input type="date" name="date_end" id="date_end"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                        value="{{ old('date_end', $event->date_end) }}" required>
+                        value="{{ old('date_end', $event->date_end ? $event->date_end->format('Y-m-d') : '') }}" required>
                     @error('date_end')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -83,36 +83,34 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <a href="{{ route('events.index') }}"
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">Cancelar</a>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Actualizar
-                        evento</button>
+                    <a href="{{ route('events.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">Cancelar</a>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Actualizar Evento</button>
                 </div>
             </form>
         </div>
     </div>
-@endsection
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('event-edit-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('event-edit-form').addEventListener('submit', function(event) {
+                event.preventDefault();
 
-            Swal.fire({
-                title: "¿Quieres actualizar este evento?",
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: "Actualizar",
-                denyButtonText: `No Actualizar`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire("Evento actualizado con éxito!", "", "success").then(() => {
-                        this.submit();
-                    });
-                } else if (result.isDenied) {
-                    Swal.fire("Se canceló la actualización", "", "info");
-                }
+                Swal.fire({
+                    title: "¿Quieres actualizar este evento?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Actualizar",
+                    denyButtonText: `No Actualizar`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire("Evento actualizado con éxito!", "", "success").then(() => {
+                            this.submit();
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Se canceló la actualización", "", "info");
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+@endsection
