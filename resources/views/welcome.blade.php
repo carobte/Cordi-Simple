@@ -929,26 +929,26 @@
                 <main class="mt-6">
                     <h1 class="flex justify-center space-x-4 mt-6 text-[#c9e0e9] text-6xl font-bold"
                         style="font-family: 'Bangers', cursive; text-shadow: 2px 2px 0 #134568;">
-                        Welcome to CordiSimple
+                        Bienvenido a CordiSimple
                     </h1>
 
                     @if (Route::has('login'))
                         <nav class="flex justify-center space-x-4 mt-6">
                             @auth
-                                <a href="{{ url('/dashboard') }}"
+                                <a href="{{ url('/events') }}"
                                     class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 transition hover:bg-blue-500 hover:text-white">
-                                    Dashboard
+                                    Eventos
                                 </a>
                             @else
                                 <a href="{{ route('login') }}"
                                     class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 transition hover:bg-blue-500 hover:text-white">
-                                    Log in
+                                    Iniciar sesion
                                 </a>
 
                                 @if (Route::has('register'))
                                     <a href="{{ route('register') }}"
                                         class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 transition hover:bg-blue-500 hover:text-white">
-                                        Register
+                                        Registrarse
                                     </a>
                                 @endif
                             @endauth
