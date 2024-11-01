@@ -1,10 +1,10 @@
 <section class="max-w-7xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
+            {{ __('Informacion del perfil') }}
         </h2>
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Actualiza tu informacion.") }}
         </p>
     </header>
 
@@ -17,14 +17,14 @@
         @method('patch')
 
         <div>
-            <x-input-label for="rols_id" :value="__('Role del Usuario')" />
+            <x-input-label for="rols_id" :value="__('Rol del Usuario')" />
             <div class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded-md">
                 {{ $user->rol->name}}
             </div>
         </div>
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('Nombre')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="flex items-center justify-between">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-primary-button>{{ __('Guardar') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-gray-600 dark:text-gray-400">
