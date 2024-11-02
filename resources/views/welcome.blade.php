@@ -962,17 +962,21 @@
             </div>
         </div>
     </div>
-    <script>
-        const logo = document.getElementById('logo');
-        let rotation = 0;
 
+    <script>
+        // Get the logo element by its ID
+        const logo = document.getElementById('logo');
+        let rotation = 0; // Initialize the rotation angle
+
+        // Function to rotate the logo
         function rotateLogo() {
             rotation += 0.5; // Incrementar la rotación
             logo.style.transform = `rotateY(${rotation}deg)`; // Aplicar la rotación
             requestAnimationFrame(rotateLogo); // Llamar a la función nuevamente
         }
+    </script>
 
-        rotateLogo(); // Iniciar la rotación
+    rotateLogo(); // Iniciar la rotación
     </script>
     <script>
         particlesJS("particles-js", {

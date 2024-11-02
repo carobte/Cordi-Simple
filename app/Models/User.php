@@ -11,14 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable; // Enables factory creation and notification capabilities.
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Fields that can be assigned in bulk when creating or updating a user.
      */
+
     protected $fillable = [
         'name',
         'email',
@@ -28,19 +27,19 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Sensitive information that should not be exposed.
      */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Get the attributes that should be cast to specific types.
+     * This defines how certain fields are formatted when retrieved.
      */
+
     protected function casts(): array
     {
         return [
@@ -49,14 +48,23 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Defines a belongs-to relationship with the Rol model.
+     * This indicates that a user is associated with a specific role.
+     */
+
     public function rol(): BelongsTo
     {
         return $this->belongsTo(Rol::class, 'rols_id', 'id');
     }
 
+    /**
+     * Defines a one-to-many relationship with the Reservation model.
+     * A user can have multiple reservations associated with their account.
+     */
+
     public function reservation(): HasMany
     {
         return $this->hasMany(Reservation::class, 'user_id', 'id');
     }
-
 }

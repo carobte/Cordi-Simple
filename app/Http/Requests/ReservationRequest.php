@@ -6,9 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ReservationRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
+     * Always returns true, allowing any user to proceed with the request.
      */
+
     public function authorize(): bool
     {
         return true;
@@ -16,9 +19,11 @@ class ReservationRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     * Specifies the rules for validating reservation data.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
@@ -30,7 +35,12 @@ class ReservationRequest extends FormRequest
             'modified_at' => 'nullable|date|after_or_equal:created_at',
         ];
     }
-    
+
+    /**
+     * Custom error messages for validation failures.
+     * Provides specific error messages for each validation rule.
+     */
+
     public function messages()
     {
         return [
@@ -48,5 +58,4 @@ class ReservationRequest extends FormRequest
             'modified_at.after_or_equal' => 'La fecha de modificación debe ser posterior o igual a la fecha de creación.',
         ];
     }
-
 }

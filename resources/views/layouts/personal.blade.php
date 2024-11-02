@@ -12,17 +12,15 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-
-
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-{{-- scripts --}}
+
+{{-- Load CSS and JS assets --}}
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 <body>
-    {{-- components --}}
+    {{-- Header Component --}}
     <header>
         <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
             <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
@@ -35,7 +33,7 @@
                     @if (Route::has('login'))
                         <nav class="flex items-center lg:order-2">
                             @auth
-                                <!-- Settings Dropdown -->
+                                <!-- Settings Dropdown for authenticated users -->
                                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                                     <x-dropdown align="right" width="48">
                                         <x-slot name="trigger">
@@ -55,35 +53,35 @@
 
                                         <x-slot name="content">
                                             <x-dropdown-link :href="route('profile.edit')">
-                                                {{ __('Perfil') }}
+                                                {{ __('Profile') }}
                                             </x-dropdown-link>
 
-                                            <!-- Authentication -->
+                                            <!-- Logout Form -->
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
 
                                                 <x-dropdown-link :href="route('logout')"
                                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                                    {{ __('Cerrar sesion') }}
+                                                    {{ __('Logout') }}
                                                 </x-dropdown-link>
                                             </form>
                                         </x-slot>
                                     </x-dropdown>
                                 </div>
                             @else
+                                <!-- Login and Register Links for unauthenticated users -->
                                 <a href="{{ route('login') }}"
                                     class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Login</a>
-                                </a>
 
                                 @if (Route::has('register'))
                                     <a href="{{ route('register') }}"
                                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Register</a>
-                                    </a>
                                 @endif
                             @endauth
                         </nav>
                     @endif
+                    <!-- Mobile menu button -->
                     <button data-collapse-toggle="mobile-menu-2" type="button"
                         class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         aria-controls="mobile-menu-2" aria-expanded="false">
@@ -103,13 +101,14 @@
                 </div>
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                        <!-- Navigation Links -->
                         <li>
                             <a href="{{ route('events.index') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Eventos</a>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Events</a>
                         </li>
                         <li>
                             <a href="{{ route('reservations.index') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Reservaciones</a>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Reservations</a>
                         </li>
                     </ul>
                 </div>
@@ -117,17 +116,14 @@
         </nav>
     </header>
 
-
-    {{-- components --}}
+    {{-- Main Content Area --}}
     <main class="mt-10">
         <div class="">
-            @yield('content')
+            @yield('content') <!-- Placeholder for content from child views -->
         </div>
     </main>
 
-
-    {{-- components --}}
-
+    {{-- Scripts --}}
     <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

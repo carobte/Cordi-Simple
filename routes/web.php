@@ -15,12 +15,12 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Event Routes
-
     Route::get('events', [EventController::class, 'index'])->name('events.index');
     Route::get('events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('events', [EventController::class, 'store'])->name('events.store');
@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 
     // Reservation Routes
-
     Route::get('reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::get('reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('reservations', [ReservationController::class, 'store'])->name('reservations.store');
