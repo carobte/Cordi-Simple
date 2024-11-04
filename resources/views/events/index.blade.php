@@ -4,16 +4,17 @@
     <div class="flex justify-center items-center mb-6 max-w-7xl mx-auto">
         <h1 class="text-3xl font-bold text-gray-800 mx-auto">Eventos Disponibles</h1>
         @if (Auth::user()->rol->name == 'administrator')
+            <!-- Button to create a new event, visible only to administrators -->
             <a href="{{ route('events.create') }}" class="bg-blue-500 p-3 text-white rounded hover:bg-blue-600">
                 Nuevo evento
             </a>
         @endif
     </div>
 
-    <!-- Container for events -->
+    <!-- Container for displaying available events -->
     <div class="flex justify-center items-center flex-wrap gap-5 overflow-x-auto max-w-7xl mx-auto w-screen">
-        <!-- Filtering active events -->
         @php
+            // Filter events that are active (status = 1)
             $eventsActive = $events->where('status', 1);
         @endphp
 
@@ -34,23 +35,27 @@
                         <span class="text-slate-800">Capacidad máxima:</span> {{ $event->max_slots }}
                     </p>
                     <p class="text-slate-600 leading-normal font-light my-3 capitalize">
+                        <span class="text-slate-800">Lugares ocupados:</span> {{ $event->occupied_slots }}
+                    </p>
+                    <p class="text-slate-600 leading-normal font-light my-3 capitalize">
                         <span class="text-slate-800">Estado:</span> {{ $event->status ? 'activo' : 'inactivo' }}
                     </p>
                     <p class="text-slate-600 leading-normal font-light my-3 capitalize">
                         <span class="text-slate-800">Creado:</span> {{ $event->created_at->format('d-m-Y H:i:s') }}
                     </p>
                     <p class="text-slate-600 leading-normal font-light my-3 capitalize">
-                        <span class="text-slate-800">Ultima Actualización:</span> {{ $event->updated_at->diffForHumans() }}
+                        <span class="text-slate-800">Última Actualización:</span> {{ $event->updated_at->diffForHumans() }}
                     </p>
+
+                    <!-- Action buttons based on user role -->
                     <div class="flex justify-end gap-4 mt-4 items-center">
                         @if (Auth::user()->rol->name == 'administrator')
-                            <!-- Edit link for administrators -->
+                            <!-- Link to edit and delete options for administrator role -->
                             <div class="inline-block ml-4">
                                 <a href="{{ route('events.edit', $event->id) }}"
                                     class="bg-violet-500 px-3 py-2 text-white rounded hover:bg-violet-600">Editar</a>
                             </div>
 
-                            <!-- Form for deleting the event -->
                             <form action="{{ route('events.destroy', $event->id) }}" method="POST"
                                 class="inline-block m-0 event-delete-form" data-event-id="{{ $event->id }}">
                                 @csrf
@@ -59,15 +64,34 @@
                                     class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Eliminar</button>
                             </form>
                         @elseif(Auth::user()->rol->name == 'general user')
-                            <!-- Reservation link for general users -->
-                            <a href="{{ route('reservations.create', ['event_id' => $event->id]) }}"
-                                class="bg-violet-500 px-3 py-2 text-white rounded hover:bg-violet-600">Reservar</a>
+                            @php
+                                // Check if the user has an active reservation for this event
+                                $hasActiveReservation = Auth::user()
+                                    ->reservation()
+                                    ->where('event_id', $event->id)
+                                    ->where('status', 1) // Ensure reservation status is active
+                                    ->exists();
+                            @endphp
+
+                            @if ($hasActiveReservation)
+                                <!-- If user has an active reservation, show "Go to reservation" button -->
+                                <a href="{{ route('reservations.index') }}"
+                                    class="bg-green-500 px-3 py-2 text-white rounded hover:bg-green-600">Ir a la reserva</a>
+                            @elseif ($event->occupied_slots >= $event->max_slots)
+                                <!-- If event is fully booked and user has no active reservation, show "Sold Out" label -->
+                                <span class="bg-yellow-500 px-3 py-2 text-white rounded cursor-not-allowed">Agotado</span>
+                            @else
+                                <!-- If event has available slots, allow user to create a reservation -->
+                                <a href="{{ route('reservations.create', ['event_id' => $event->id]) }}"
+                                    class="bg-violet-500 px-3 py-2 text-white rounded hover:bg-violet-600">Reservar</a>
+                            @endif
                         @endif
                     </div>
+
                 </div>
             </div>
         @empty
-            <!-- Message when there are no events available -->
+            <!-- Message shown if no active events are available -->
             <tr>
                 <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">No hay eventos disponibles.
                 </td>
@@ -75,6 +99,7 @@
         @endforelse
     </div>
 @endsection
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
