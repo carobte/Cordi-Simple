@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\EventUpdateRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -72,15 +73,16 @@ class EventController extends Controller
      * Validates and updates the event data, then redirects to the event list with a success message.
      */
 
-    public function update(EventRequest $request, string $id)
-    {
-        $validatedData = $request->validated();
-
-        $event = Event::findOrFail($id);
-        $event->update($validatedData);
-
-        return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
-    }
+     public function update(EventUpdateRequest $request, string $id)
+     {
+         $validatedData = $request->validated();
+     
+         $event = Event::findOrFail($id);
+         $event->update($validatedData);
+     
+         return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
+     }
+     
 
     /**
      * Remove the specified event from storage.
