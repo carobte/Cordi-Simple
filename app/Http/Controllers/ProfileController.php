@@ -11,9 +11,12 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+
     /**
      * Display the user's profile form.
+     * Returns the 'profile.edit' view with the current user's information.
      */
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -23,7 +26,11 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
+     * Validates and updates the user's profile data.
+     * If the email address is modified, it resets the email verification date.
+     * Redirects back to the profile edit page with a status message upon success.
      */
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
@@ -39,7 +46,10 @@ class ProfileController extends Controller
 
     /**
      * Delete the user's account.
+     * Validates the password, logs out the user, deletes the account,
+     * invalidates the session, regenerates the token, and redirects to the home page.
      */
+    
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [

@@ -1,5 +1,100 @@
 @extends('layouts.personal')
 
 @section('content')
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Lista de Reservas</h1>
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Mis Reservas</h1>
+
+        {{-- Check if there are no reservations for the user --}}
+        @if ($reservations->isEmpty())
+            <p class="text-gray-700 text-center">No tienes reservas en este momento.</p>
+        @else
+            {{-- Display each reservation in a card layout --}}
+            <div class="flex justify-center items-center flex-wrap gap-5 overflow-x-auto max-w-7xl mx-auto">
+                @foreach ($reservations as $reservation)
+                    <div
+                        class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
+                        <div class="p-4">
+                            <h2 class="text-xl font-bold mb-4">Detalles de tu Reserva</h2>
+
+                            {{-- Event details --}}
+                            <p class="text-slate-800 text-lg font-semibold capitalize"><strong>Nombre del evento:</strong>
+                                {{ $reservation->event->name }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Descripción:</strong>
+                                {{ ucfirst($reservation->event->description) }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3 capitalize"><strong>Ubicación:</strong>
+                                {{ $reservation->event->location }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Inicio:</strong>
+                                {{ $reservation->event->date_start }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Finalización:</strong>
+                                {{ $reservation->event->date_end }}</p>
+
+                            <div class="flex justify-end mt-4">
+
+                                {{-- Form to update reservation status (cancel) --}}
+                                <form action="{{ route('reservations.update', $reservation->id) }}" method="POST"
+                                    class="update-reservation-form" data-reservation-id="{{ $reservation->id }}"
+                                    data-event-name="{{ $reservation->event->name }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="0">
+
+                                    {{-- Sets the reservation status to inactive (canceled) --}}
+                                    <button type="submit"
+                                        class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar
+                                        Reserva</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+
 @endsection
+
+<!-- Script for SweetAlert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Selects all reservation update forms
+        const updateForms = document.querySelectorAll('.update-reservation-form');
+
+        // Adds an event listener for each form to confirm cancellation before submission
+        updateForms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Evita el envío inmediato del formulario
+
+                // Retrieve the event name for display in the confirmation alert
+                const eventName = this.getAttribute(
+                    'data-event-name'); // Obtiene el nombre del evento
+
+                // Displays a confirmation dialog to the user
+                Swal.fire({
+                    title: "¿Estás seguro que quieres cancelar la reserva de '" +
+                        eventName + "'?",
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, cancelar!",
+                    cancelButtonText: "No, volver"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        // If the user confirms, display a success message before form submission
+                        Swal.fire({
+                            title: "Reserva cancelada!",
+                            icon: "success"
+                        }).then(() => {
+                            this
+                        .submit(); // Submit the form if cancellation is confirmed
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>

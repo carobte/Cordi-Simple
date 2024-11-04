@@ -8,11 +8,14 @@ use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
+
     /**
      * Get the validation rules that apply to the request.
+     * Specifies validation requirements for updating the user's profile.
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
+
     public function rules(): array
     {
         return [

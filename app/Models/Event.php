@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Event extends Model
 {
 
-    protected $table = "events";
-    public $timestamps = true;
-    // Define qué campos se pueden llenar automáticamente
+    protected $table = "events"; // Specifies the associated database table.
+    public $timestamps = true; // Enables automatic handling of created_at and updated_at timestamps.
+
+    // Fields that can be mass-assigned
+
     protected $fillable = [
         'name',
         'description',
@@ -24,10 +26,13 @@ class Event extends Model
         'status'
     ];
 
+    /**
+     * Defines a one-to-many relationship with the Reservation model.
+     * An event can have multiple reservations associated with it.
+     */
+
     public function reservation(): HasMany
     {
         return $this->hasMany(Reservation::class, 'event_id', 'id');
     }
-
-
 }

@@ -19,20 +19,22 @@
                 <p class="text-gray-700 capitalize"><strong>Nombre:</strong> {{ $user->name }}</p>
                 <p class="text-gray-700"><strong>Email:</strong> {{ $user->email }}</p>
 
-
+                {{-- Form to create a new reservation --}}
                 <form action="{{ route('reservations.store') }}" method="POST" id="create-reservation-form">
                     @csrf
 
+                    {{-- Hidden inputs to store necessary data for the reservation --}}
                     <input type="hidden" name="event_id" value="{{ $event->id }}">
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
                     <input type="hidden" name="status" value="1">
                     <input type="hidden" name="created_at" value="{{ now() }}">
                     <input type="hidden" name="modified_at" value="{{ now() }}">
 
-            
                     <div class="flex justify-end">
+                        {{-- Button to cancel and go back to the events index --}}
                         <a href="{{ route('events.index') }}"
                             class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">Cancelar</a>
+                        {{-- Button to submit the form and create a new reservation --}}
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Crear nueva
                             reserva</button>
                     </div>

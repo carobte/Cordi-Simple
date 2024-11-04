@@ -10,42 +10,55 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of the user's active reservations.
      */
     public function index()
     {
-        $reservations = Reservation::all();
+        $reservations = Reservation::where('user_id', Auth::id())
+            ->where('status', 1) // Only retrieves active reservations
+            ->get();
         return view('reservations.index', compact("reservations"));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new reservation.
      */
     public function create(Request $request)
     {
-        // Captura el ID del evento de la solicitud
+        // Capture the event ID from the request
         $eventId = $request->input('event_id');
 
-        // Obtén el usuario autenticado
-        $user = Auth::user(); // Esto te dará un objeto con toda la información del usuario
+        // Get the authenticated user
+        $user = Auth::user(); // Retrieves the entire user object
 
-        // Carga el evento usando el ID
+        // Load the event using the event ID
         $event = Event::find($eventId);
 
-        // Retorna la vista con el evento y el usuario
+        // Return the view with event and user data
         return view('reservations.create', compact('event', 'user'));
     }
 
+    /**
+     * Store a newly created reservation in the database.
+     */
     public function store(ReservationRequest $request)
     {
+        // Validate and create the reservation
         $validatedData = $request->validated();
         Reservation::create($validatedData);
-        return redirect()->route('events.index')->with('success', 'Reservación creada exitosamente.');
+
+        // Increment the occupied_slots field for the associated event
+        $event = Event::find($validatedData['event_id']);
+        $event->increment('occupied_slots');
+
+        // Redirect to events page with success message
+        return redirect()->route('events.index')->with('success', 'Reservation successfully created.');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified reservation details.
      */
     public function show(string $id)
     {
@@ -53,7 +66,7 @@ class ReservationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified reservation.
      */
     public function edit(string $id)
     {
@@ -61,18 +74,39 @@ class ReservationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the status of the specified reservation.
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the request to ensure 'status' is a boolean
+        $request->validate([
+            'status' => 'required|boolean',
+        ]);
+
+        // Find the reservation by its ID
+        $reservation = Reservation::findOrFail($id);
+
+        // Check if the reservation is active and is being canceled (status set to 0)
+        if ($reservation->status === 1 && $request->input('status') == 0) {
+            // Retrieve the event associated with this reservation
+            $event = $reservation->event;
+
+            // Decrement the event's occupied_slots by 1
+            $event->decrement('occupied_slots');
+        }
+
+        // Update the reservation's status
+        $reservation->status = $request->input('status');
+
+        // Save changes to the reservation
+        $reservation->save();
+
+        // Redirect back to reservation list with success message
+        return redirect()->route('reservations.index')->with('success', 'Reservation successfully canceled.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified reservation from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy(string $id) {}
 }

@@ -9,28 +9,35 @@ use Illuminate\Database\Seeder;
 
 class ReservationSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
+     * This method populates the 'reservations' table with predefined reservation data.
+     * Each reservation is created with a status, a user ID, and an event ID.
+     *
+     * @return void
      */
+
     public function run(): void
     {
-        // Crear 3 reservas específicas
+        // Create three specific reservations
+        
         Reservation::create([
             'status' => true,
-            'user_id' => 1, // Usuario 1
-            'event_id' => 3, // Evento 1
+            'user_id' => 1, // User ID 1
+            'event_id' => 3, // Event ID 1
         ]);
 
         Reservation::create([
             'status' => true,
-            'user_id' => 2, // Usuario 2
-            'event_id' => 4, // Evento 2
+            'user_id' => 2, // User ID 2
+            'event_id' => 4, // Event ID 2
         ]);
 
         Reservation::create([
             'status' => true,
-            'user_id' => 4, // Usuario 3
-            'event_id' => 5, // Evento 3
+            'user_id' => 4, // User ID 3
+            'event_id' => 5, // Event ID 3
         ]);
     }
 }

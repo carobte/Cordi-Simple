@@ -962,48 +962,58 @@
             </div>
         </div>
     </div>
+
     <script>
+
+        // Get the logo element by its ID
         const logo = document.getElementById('logo');
-        let rotation = 0;
+        let rotation = 0; // Initialize the rotation angle
 
+        // Function to rotate the logo continuously
         function rotateLogo() {
-            rotation += 0.5; // Incrementar la rotación
-            logo.style.transform = `rotateY(${rotation}deg)`; // Aplicar la rotación
-            requestAnimationFrame(rotateLogo); // Llamar a la función nuevamente
+            rotation += 0.5; // Increment the rotation
+            logo.style.transform = `rotateY(${rotation}deg)`; // Apply the rotation
+            requestAnimationFrame(rotateLogo); // Call the function again for animation
         }
-
-        rotateLogo(); // Iniciar la rotación
+        
     </script>
+
     <script>
+        rotateLogo(); // Start the logo rotation
+    </script>
+
+    <script>
+
+        // Initialize particles.js with configuration settings
         particlesJS("particles-js", {
             "particles": {
                 "number": {
-                    "value": 100,
+                    "value": 100, // Number of particles
                     "density": {
                         "enable": true,
-                        "value_area": 800
+                        "value_area": 800 // Density area for particles
                     }
                 },
                 "color": {
-                    "value": "#ffffff"
+                    "value": "#ffffff" // Particle color
                 },
                 "shape": {
-                    "type": "circle",
+                    "type": "circle", // Shape of the particles
                     "stroke": {
                         "width": 0,
-                        "color": "#000000"
+                        "color": "#000000" // Particle border color
                     },
                     "polygon": {
-                        "nb_sides": 5
+                        "nb_sides": 5 // Number of sides for polygon shapes
                     },
                     "image": {
-                        "src": "img/github.svg",
+                        "src": "img/github.svg", // Source of image particles
                         "width": 100,
                         "height": 100
                     }
                 },
                 "opacity": {
-                    "value": 0.5,
+                    "value": 0.5, // Particle opacity
                     "random": false,
                     "anim": {
                         "enable": false,
@@ -1013,7 +1023,7 @@
                     }
                 },
                 "size": {
-                    "value": 3,
+                    "value": 3, // Particle size
                     "random": true,
                     "anim": {
                         "enable": false,
@@ -1023,19 +1033,19 @@
                     }
                 },
                 "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 1
+                    "enable": true, // Enable line linking between particles
+                    "distance": 150, // Distance for linking particles
+                    "color": "#ffffff", // Line color
+                    "opacity": 0.4, // Line opacity
+                    "width": 1 // Line width
                 },
                 "move": {
-                    "enable": true,
-                    "speed": 6,
-                    "direction": "none",
+                    "enable": true, // Enable particle movement
+                    "speed": 6, // Speed of particle movement
+                    "direction": "none", // Movement direction
                     "random": false,
                     "straight": false,
-                    "out_mode": "out",
+                    "out_mode": "out", // Behavior when particles leave the canvas
                     "attract": {
                         "enable": false,
                         "rotateX": 600,
@@ -1044,47 +1054,48 @@
                 }
             },
             "interactivity": {
-                "detect_on": "canvas",
+                "detect_on": "canvas", // Interaction detection area
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "repulse"
+                        "mode": "repulse" // Effect on hover
                     },
                     "onclick": {
                         "enable": true,
-                        "mode": "push"
+                        "mode": "push" // Effect on click
                     },
-                    "resize": true
+                    "resize": true // Enable canvas resizing
                 },
                 "modes": {
                     "grab": {
-                        "distance": 400,
+                        "distance": 400, // Distance for grabbing particles
                         "line_linked": {
-                            "opacity": 1
+                            "opacity": 1 // Opacity of linking line when grabbing
                         }
                     },
                     "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
+                        "distance": 400, // Distance for bubble effect
+                        "size": 40, // Size of bubble
+                        "duration": 2, // Duration of bubble effect
+                        "opacity": 8, // Bubble opacity
+                        "speed": 3 // Bubble speed
                     },
                     "repulse": {
-                        "distance": 200,
-                        "duration": 2
+                        "distance": 200, // Distance for repulsion effect
+                        "duration": 2 // Duration of repulsion effect
                     },
                     "push": {
-                        "particles_nb": 4
+                        "particles_nb": 4 // Number of particles to push
                     },
                     "remove": {
-                        "particles_nb": 2
+                        "particles_nb": 2 // Number of particles to remove
                     }
                 }
             },
-            "retina_detect": true
+            "retina_detect": true // Enable retina display detection
         });
     </script>
+
 </body>
 
 </html>

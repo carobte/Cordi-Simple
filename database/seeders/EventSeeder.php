@@ -8,11 +8,20 @@ use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
+     * This method populates the 'events' table with predefined event data.
+     * Each event includes details such as name, description, start and end dates, location, 
+     * maximum slots available, currently occupied slots, and status.
+     *
+     * @return void
      */
+
     public function run(): void
     {
+
+        // An array of events to be seeded into the database.
         $events = [
             [
                 'name' => 'festival de música',
@@ -116,6 +125,7 @@ class EventSeeder extends Seeder
             ],
         ];
 
+        // Loop through the events array and insert each event into the database.
         foreach ($events as $event) {
             Event::firstOrCreate(
                 ['name' => $event['name']],
