@@ -6,8 +6,10 @@ use App\Http\Requests\EventRequest;
 use App\Http\Requests\EventUpdateRequest;
 use App\Models\Event;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Notifications\EventCancelledNotification;
+use Illuminate\Support\Facades\Log;
+
 
 class EventController extends Controller
 {
@@ -74,15 +76,15 @@ class EventController extends Controller
      * Validates and updates the event data, then redirects to the event list with a success message.
      */
 
-     public function update(EventUpdateRequest $request, string $id)
-     {
-         $validatedData = $request->validated();
+    public function update(EventUpdateRequest $request, string $id)
+    {
+        $validatedData = $request->validated();
 
-         $event = Event::findOrFail($id);
-         $event->update($validatedData);
+        $event = Event::findOrFail($id);
+        $event->update($validatedData);
 
-         return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
-     }
+        return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
+    }
 
 
     /**
@@ -91,22 +93,41 @@ class EventController extends Controller
      */
 
      public function destroy(string $id)
-     {
-         $event = Event::findOrFail($id);
+    {
+        // Find the event by its ID
+        $event = Event::findOrFail($id);
 
-         // Set the event status to false
-         $event->status = false;
-         $event->save(); // Save the changes to the event
+        // Set the event status to 'false' (canceled)
+        $event->status = false;
+        $event->save(); // Save changes to the event
 
-         // Find all reservations associated with the event
-         $reservations = Reservation::where('event_id', $event->id)->get();
+        // Find all reservations associated with the event
+        $reservations = Reservation::where('event_id', $event->id)->get();
 
-         // Update the 'status' field of each reservation to false
-         foreach ($reservations as $reservation) {
-             $reservation->status = false;
-             $reservation->save(); // Save each reservation with the new status
-         }
-         return redirect()->route('events.index');
-     }
+        // Update the 'status' of each reservation to 'false'
+        foreach ($reservations as $reservation) {
+            $reservation->status = false;
+            $reservation->save(); // Save each reservation with the new state
+        }
+        
 
-}
+        // Check for reservations with users
+        $usersNotified = 0; // Counter of notified users
+
+        foreach ($reservations as $reservation) {
+            if ($reservation->user) {  // Make sure the booking has a user
+                $reservation->user->notify(new EventCancelledNotification($event));  // Notify the user
+                $usersNotified++;
+            }
+        }
+
+        // If there were no users to notify
+        if ($usersNotified === 0) {
+            Log::info("No hay usuarios suscritos al evento con ID {$event->id}.");
+        }
+
+        // Redirect to the event list with a success message
+        return redirect()->route('events.index')->with('success', 'Evento cancelado exitosamente.');
+    }
+ }
+

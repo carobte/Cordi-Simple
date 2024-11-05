@@ -16,9 +16,24 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::where('user_id', Auth::id())
-            ->get();
-        return view('reservations.index', compact("reservations"));
+        // Verify if the user is logged in
+        if (!Auth::check()) {
+            return redirect()->back()->withErrors(['login' => 'Debes estar logueado para hacer una reserva.'])->withInput();
+        }
+
+        // Get the user logged
+        $user = Auth::user();
+
+        // If the user is admin, get all reservations
+        if ($user->rols_id == 1) {
+            $reservations = Reservation::all();
+        } else {
+            // If the user isn't admin, get only his reservations
+            $reservations = Reservation::where('user_id', $user->id)->get();
+        }
+
+        // return the reservations of the view
+        return view('reservations.index', compact('reservations'));
     }
 
     /**
@@ -49,9 +64,9 @@ class ReservationController extends Controller
 
         // Check if there is already a reservation for the same user and event with status 0 (cancelled)
         $existingReservation = Reservation::where('user_id', $validatedData['user_id'])
-                                          ->where('event_id', $validatedData['event_id'])
-                                          ->where('status', 0) // Check if the reservation is cancelled
-                                          ->first();
+            ->where('event_id', $validatedData['event_id'])
+            ->where('status', 0) // Check if the reservation is cancelled
+            ->first();
 
 
         if ($existingReservation) {
@@ -131,5 +146,5 @@ class ReservationController extends Controller
     /**
      * Remove the specified reservation from storage.
      */
-    public function destroy(string $id){}
+    public function destroy(string $id) {}
 }
