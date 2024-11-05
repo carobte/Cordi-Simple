@@ -11,22 +11,19 @@
             {{-- Display each reservation in a card layout --}}
             <div class="flex justify-center items-center flex-wrap gap-5 overflow-x-auto max-w-7xl mx-auto">
                 @foreach ($reservations as $reservation)
-                    <div
-                        class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
+                    <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
                         <div class="p-4">
-                            <h2 class="text-xl font-bold mb-4">Detalles de tu Reserva</h2>
 
                             {{-- Event details --}}
-                            <p class="text-slate-800 text-lg font-semibold capitalize"><strong>Nombre del evento:</strong>
-                                {{ $reservation->event->name }}</p>
-                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Descripción:</strong>
-                                {{ ucfirst($reservation->event->description) }}</p>
-                            <p class="text-slate-600 leading-normal font-light my-3 capitalize"><strong>Ubicación:</strong>
-                                {{ $reservation->event->location }}</p>
-                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Inicio:</strong>
-                                {{ $reservation->event->date_start }}</p>
-                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Finalización:</strong>
-                                {{ $reservation->event->date_end }}</p>
+                            <p class="text-slate-800 text-lg font-semibold capitalize"><strong>Nombre:</strong> {{ $reservation->event->name }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Descripción:</strong> {{ ucfirst($reservation->event->description) }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3 capitalize"><strong>Ubicación:</strong> {{ $reservation->event->location }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Inicio:</strong> {{ $reservation->event->date_start }}</p>
+                            <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Finalización:</strong> {{ $reservation->event->date_end }}</p>
+
+                            <p class="{{ $reservation->status == 0 ? 'text-red-500' : 'text-green-500' }} leading-normal font-light my-3">
+                                <strong>Estado:</strong> {{ $reservation->status == 0 ? 'Cancelado' : 'Activo' }}
+                            </p>
 
                             <div class="flex justify-end mt-4">
 
@@ -38,10 +35,17 @@
                                     @method('PUT')
                                     <input type="hidden" name="status" value="0">
 
-                                    {{-- Sets the reservation status to inactive (canceled) --}}
-                                    <button type="submit"
-                                        class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar
-                                        Reserva</button>
+                                    {{-- Show the "Cancelar Reserva" button only if the reservation is not canceled --}}
+                                    @if ($reservation->status != 0)
+                                        <button type="submit" class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">
+                                            Cancelar Reserva
+                                        </button>
+                                    @else
+                                        {{-- Display "Cancelado" if the reservation has been canceled --}}
+                                        <a href="#" class="bg-gray-400 px-3 py-1 text-white rounded cursor-not-allowed">
+                                            Cancelado
+                                        </a>
+                                    @endif
                                 </form>
                             </div>
                         </div>
@@ -64,16 +68,14 @@
         // Adds an event listener for each form to confirm cancellation before submission
         updateForms.forEach(form => {
             form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Evita el envío inmediato del formulario
+                event.preventDefault(); // Prevents form from submitting immediately
 
                 // Retrieve the event name for display in the confirmation alert
-                const eventName = this.getAttribute(
-                    'data-event-name'); // Obtiene el nombre del evento
+                const eventName = this.getAttribute('data-event-name'); // Get the event name
 
                 // Displays a confirmation dialog to the user
                 Swal.fire({
-                    title: "¿Estás seguro que quieres cancelar la reserva de '" +
-                        eventName + "'?",
+                    title: "¿Estás seguro que quieres cancelar la reserva de '" + eventName + "'?",
                     text: "Esta acción no se puede deshacer.",
                     icon: "warning",
                     showCancelButton: true,
@@ -83,14 +85,12 @@
                     cancelButtonText: "No, volver"
                 }).then((result) => {
                     if (result.isConfirmed) {
-
                         // If the user confirms, display a success message before form submission
                         Swal.fire({
                             title: "Reserva cancelada!",
                             icon: "success"
                         }).then(() => {
-                            this
-                        .submit(); // Submit the form if cancellation is confirmed
+                            this.submit(); // Submit the form if cancellation is confirmed
                         });
                     }
                 });

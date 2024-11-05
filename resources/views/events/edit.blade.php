@@ -121,7 +121,7 @@
             Swal.fire({
                 title: "¿Quieres actualizar este evento?", // Ask for confirmation
                 showDenyButton: true,
-                showCancelButton: true,
+                showCancelButton: false,
                 confirmButtonText: "Actualizar",
                 denyButtonText: `No Actualizar`
             }).then((result) => {

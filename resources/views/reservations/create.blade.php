@@ -15,7 +15,7 @@
                 <p class="text-gray-700"><strong>Fecha de Finalización:</strong> {{ $event->date_end }}</p>
 
                 <hr class="my-4">
-        
+
                 <p class="text-gray-700 capitalize"><strong>Nombre:</strong> {{ $user->name }}</p>
                 <p class="text-gray-700"><strong>Email:</strong> {{ $user->email }}</p>
 

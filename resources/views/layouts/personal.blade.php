@@ -53,7 +53,7 @@
 
                                         <x-slot name="content">
                                             <x-dropdown-link :href="route('profile.edit')">
-                                                {{ __('Profile') }}
+                                                {{ __('Perfil') }}
                                             </x-dropdown-link>
 
                                             <!-- Logout Form -->
@@ -63,7 +63,7 @@
                                                 <x-dropdown-link :href="route('logout')"
                                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                                    {{ __('Logout') }}
+                                                    {{ __('Cerrar sesion') }}
                                                 </x-dropdown-link>
                                             </form>
                                         </x-slot>
@@ -104,11 +104,11 @@
                         <!-- Navigation Links -->
                         <li>
                             <a href="{{ route('events.index') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Events</a>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Eventos</a>
                         </li>
                         <li>
                             <a href="{{ route('reservations.index') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Reservations</a>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Reservaciones</a>
                         </li>
                     </ul>
                 </div>

@@ -17,7 +17,6 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::where('user_id', Auth::id())
-            ->where('status', 1) // Only retrieves active reservations
             ->get();
         return view('reservations.index', compact("reservations"));
     }
@@ -45,17 +44,41 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        // Validate and create the reservation
+        /// Get the validated data from the form
         $validatedData = $request->validated();
+
+        // Check if there is already a reservation for the same user and event with status 0 (cancelled)
+        $existingReservation = Reservation::where('user_id', $validatedData['user_id'])
+                                          ->where('event_id', $validatedData['event_id'])
+                                          ->where('status', 0) // Check if the reservation is cancelled
+                                          ->first();
+
+
+        if ($existingReservation) {
+
+            // If a cancelled reservation exists, update its status to 1 (active)
+            $existingReservation->status = 1; // Change status to active
+            $existingReservation->save(); // Save the updated reservation
+
+            // Increment the occupied slots for the associated event
+            $event = Event::find($validatedData['event_id']);
+            $event->increment('occupied_slots');
+
+            // Redirect the user back to the reservations index
+            return redirect()->route('reservations.index');
+        }
+
+        // If no cancelled reservation exists, create a new reservation
         Reservation::create($validatedData);
 
-        // Increment the occupied_slots field for the associated event
+        // Increment the occupied slots for the associated event
         $event = Event::find($validatedData['event_id']);
         $event->increment('occupied_slots');
 
-        // Redirect to events page with success message
-        return redirect()->route('events.index')->with('success', 'Reservation successfully created.');
+        // Redirect the user back to the reservations index
+        return redirect()->route('reservations.index');
     }
+
 
     /**
      * Display the specified reservation details.
@@ -102,11 +125,11 @@ class ReservationController extends Controller
         $reservation->save();
 
         // Redirect back to reservation list with success message
-        return redirect()->route('reservations.index')->with('success', 'Reservation successfully canceled.');
+        return redirect()->route('reservations.index');
     }
 
     /**
      * Remove the specified reservation from storage.
      */
-    public function destroy(string $id) {}
+    public function destroy(string $id){}
 }
