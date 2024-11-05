@@ -58,7 +58,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        // Asegúrate de convertir las fechas a Carbon
+
         if (is_string($event->date_start)) {
             $event->date_start = Carbon::parse($event->date_start);
         }
@@ -90,23 +90,23 @@ class EventController extends Controller
      * Finds and deletes the event by ID, then redirects to the event list with a success message.
      */
 
-    public function destroy(string $id)
-    {
+     public function destroy(string $id)
+     {
+         $event = Event::findOrFail($id);
 
-        $event = Event::findOrFail($id);
+         // Set the event status to false
+         $event->status = false;
+         $event->save(); // Save the changes to the event
 
-        // Establecer el estado del evento como false
-        $event->status = false;
-        $event->save(); // Guardar los cambios en el evento
+         // Find all reservations associated with the event
+         $reservations = Reservation::where('event_id', $event->id)->get();
 
-        // Encontrar todas las reservas asociadas con el evento
-        $reservations = Reservation::where('event_id', $event->id)->get();
+         // Update the 'status' field of each reservation to false
+         foreach ($reservations as $reservation) {
+             $reservation->status = false;
+             $reservation->save(); // Save each reservation with the new status
+         }
+         return redirect()->route('events.index');
+     }
 
-        // Actualizar el campo 'status' de cada reserva a false
-        foreach ($reservations as $reservation) {
-            $reservation->status = false;
-            $reservation->save(); // Guardar cada reserva con el nuevo estado
-        }
-        return redirect()->route('events.index');
-    }
 }
