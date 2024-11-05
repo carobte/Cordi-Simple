@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\EventUpdateRequest;
 use App\Models\Event;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -76,13 +77,13 @@ class EventController extends Controller
      public function update(EventUpdateRequest $request, string $id)
      {
          $validatedData = $request->validated();
-     
+
          $event = Event::findOrFail($id);
          $event->update($validatedData);
-     
+
          return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
      }
-     
+
 
     /**
      * Remove the specified event from storage.
@@ -91,8 +92,21 @@ class EventController extends Controller
 
     public function destroy(string $id)
     {
-        $event = Event::find($id);
-        $event->delete();
-        return redirect()->route("events.index")->with('success', 'Event eliminada con exito.');
+
+        $event = Event::findOrFail($id);
+
+        // Establecer el estado del evento como false
+        $event->status = false;
+        $event->save(); // Guardar los cambios en el evento
+
+        // Encontrar todas las reservas asociadas con el evento
+        $reservations = Reservation::where('event_id', $event->id)->get();
+
+        // Actualizar el campo 'status' de cada reserva a false
+        foreach ($reservations as $reservation) {
+            $reservation->status = false;
+            $reservation->save(); // Guardar cada reserva con el nuevo estado
+        }
+        return redirect()->route('events.index');
     }
 }

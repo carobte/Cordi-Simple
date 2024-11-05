@@ -17,7 +17,6 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::where('user_id', Auth::id())
-            ->where('status', 1) // Only retrieves active reservations
             ->get();
         return view('reservations.index', compact("reservations"));
     }

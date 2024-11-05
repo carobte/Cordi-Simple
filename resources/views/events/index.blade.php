@@ -55,13 +55,12 @@
                                 <a href="{{ route('events.edit', $event->id) }}"
                                     class="bg-violet-500 px-3 py-2 text-white rounded hover:bg-violet-600">Editar</a>
                             </div>
-
                             <form action="{{ route('events.destroy', $event->id) }}" method="POST"
                                 class="inline-block m-0 event-delete-form" data-event-id="{{ $event->id }}">
                                 @csrf
-                                @method('DELETE')
+                                @method('PUT') <!-- Utilizamos PUT porque estamos actualizando el estado -->
                                 <button type="submit"
-                                    class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Eliminar</button>
+                                    class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar</button>
                             </form>
                         @elseif(Auth::user()->rol->name == 'general user')
                             @php

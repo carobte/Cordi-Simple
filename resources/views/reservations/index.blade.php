@@ -14,10 +14,9 @@
                     <div
                         class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
                         <div class="p-4">
-                            <h2 class="text-xl font-bold mb-4">Detalles de tu Reserva</h2>
 
                             {{-- Event details --}}
-                            <p class="text-slate-800 text-lg font-semibold capitalize"><strong>Nombre del evento:</strong>
+                            <p class="text-slate-800 text-lg font-semibold capitalize"><strong>Nombre:</strong>
                                 {{ $reservation->event->name }}</p>
                             <p class="text-slate-600 leading-normal font-light my-3"><strong>Descripción:</strong>
                                 {{ ucfirst($reservation->event->description) }}</p>
@@ -27,6 +26,10 @@
                                 {{ $reservation->event->date_start }}</p>
                             <p class="text-slate-600 leading-normal font-light my-3"><strong>Fecha de Finalización:</strong>
                                 {{ $reservation->event->date_end }}</p>
+
+                            <p class="text-slate-600 leading-normal font-light my-3">
+                                <strong>Estado:</strong> {{ $reservation->event->status ? 'Activo' : 'Cancelado' }}
+                            </p>
 
                             <div class="flex justify-end mt-4">
 
@@ -39,9 +42,14 @@
                                     <input type="hidden" name="status" value="0">
 
                                     {{-- Sets the reservation status to inactive (canceled) --}}
-                                    <button type="submit"
-                                        class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar
-                                        Reserva</button>
+                                    @if ($reservation->event->status)
+                                        <button type="submit"
+                                            class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar
+                                            Reserva
+                                        </button>
+                                    @endif
+
+
                                 </form>
                             </div>
                         </div>
@@ -64,11 +72,10 @@
         // Adds an event listener for each form to confirm cancellation before submission
         updateForms.forEach(form => {
             form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Evita el envío inmediato del formulario
+                event.preventDefault(); // Prevents form from submitting immediately
 
                 // Retrieve the event name for display in the confirmation alert
-                const eventName = this.getAttribute(
-                    'data-event-name'); // Obtiene el nombre del evento
+                const eventName = this.getAttribute('data-event-name'); // Get the event name
 
                 // Displays a confirmation dialog to the user
                 Swal.fire({
@@ -90,7 +97,7 @@
                             icon: "success"
                         }).then(() => {
                             this
-                        .submit(); // Submit the form if cancellation is confirmed
+                                .submit(); // Submit the form if cancellation is confirmed
                         });
                     }
                 });
