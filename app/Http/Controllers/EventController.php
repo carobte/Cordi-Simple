@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use App\Notifications\EventCancelledNotification;
+use App\Notifications\AdministratorEditEvent;
 use Illuminate\Support\Facades\Log;
 
 
@@ -82,6 +83,25 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
         $event->update($validatedData);
+
+        // Find all reservations associated with the event
+        $reservations = Reservation::where('event_id', $event->id)->get();
+
+        // Check for reservations with users
+        $usersNotified = 0; // Counter of notified users
+
+        foreach ($reservations as $reservation) {
+            if ($reservation->user) {  // Make sure the booking has a user
+                $reservation->user->notify(new AdministratorEditEvent($event));  // Notify the user
+                $usersNotified++;
+            }
+        }
+
+        // If there were no users to notify
+        if ($usersNotified === 0) {
+            Log::info("No hay usuarios suscritos al evento con ID {$event->id}.");
+        }
+
 
         return redirect()->route('events.index')->with('success', 'Evento actualizado exitosamente.');
     }
