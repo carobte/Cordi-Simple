@@ -36,9 +36,9 @@
                 <!-- Event start date input field -->
                 <div class="mb-4">
                     <label for="date_start" class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
-                    <input type="date" name="date_start" id="date_start"
+                    <input type="datetime-local" name="date_start" id="date_start"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                        value="{{ old('date_start', $event->date_start ? $event->date_start->format('Y-m-d') : '') }}"
+                        value="{{ old('date_start', $event->date_start ? $event->date_start->format('Y-m-d\TH:i') : '') }}"
                         required> <!-- Fill with old value or formatted start date -->
                     @error('date_start')
                         <!-- Display error message if validation fails -->
@@ -49,9 +49,10 @@
                 <!-- Event end date input field -->
                 <div class="mb-4">
                     <label for="date_end" class="block text-gray-700 font-bold mb-2">Fecha de Finalización:</label>
-                    <input type="date" name="date_end" id="date_end"
+                    <input type="datetime-local" name="date_end" id="date_end"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                        value="{{ old('date_end', $event->date_end ? $event->date_end->format('Y-m-d') : '') }}" required>
+                        value="{{ old('date_end', $event->date_end ? $event->date_end->format('Y-m-d\TH:i') : '') }}" 
+                        required>
                     @error('date_end')
                         <!-- Display error message if validation fails -->
                         <span class="text-red-500 text-sm">{{ $message }}</span>

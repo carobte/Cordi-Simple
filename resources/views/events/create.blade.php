@@ -37,7 +37,7 @@
                 <div class="mb-4">
                     <!-- Input for the event start date -->
                     <label for="date_start" class="block text-gray-700 font-bold mb-2">Fecha de Inicio:</label>
-                    <input type="date" name="date_start" id="date_start"
+                    <input type="datetime-local" name="date_start" id="date_start"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                         value="{{ old('date_start') }}" required>
                     <!-- Error message for the start date -->
@@ -49,7 +49,7 @@
                 <div class="mb-4">
                     <!-- Input for the event end date -->
                     <label for="date_end" class="block text-gray-700 font-bold mb-2">Fecha de Finalización:</label>
-                    <input type="date" name="date_end" id="date_end"
+                    <input type="datetime-local" name="date_end" id="date_end"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                         value="{{ old('date_end') }}" required>
                     <!-- Error message for the end date -->
