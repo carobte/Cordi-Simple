@@ -99,6 +99,7 @@ class EventController extends Controller
 
         // Set the event status to 'false' (canceled)
         $event->status = false;
+        $event->occupied_slots = 0;
         $event->save(); // Save changes to the event
 
         // Find all reservations associated with the event
@@ -109,7 +110,7 @@ class EventController extends Controller
             $reservation->status = false;
             $reservation->save(); // Save each reservation with the new state
         }
-        
+
 
         // Check for reservations with users
         $usersNotified = 0; // Counter of notified users
