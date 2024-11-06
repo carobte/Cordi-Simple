@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Event;
+use App\Notifications\ReserveCancelledNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -138,6 +140,15 @@ class ReservationController extends Controller
 
         // Save changes to the reservation
         $reservation->save();
+
+        // Notification system
+
+
+        if ($reservation->user) {  // Reservation user
+            $reservation->user->notify(new ReserveCancelledNotification($reservation));  // Notify the user
+        } else {
+            Log::info("No hay usuarios suscritos a dicha reserva {$reservation->id}.");
+        }
 
         // Redirect back to reservation list with success message
         return redirect()->route('reservations.index');
