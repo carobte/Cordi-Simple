@@ -7,6 +7,7 @@ use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\UserCancelledReservation;
 
 class ReservationController extends Controller
 {
@@ -115,33 +116,47 @@ class ReservationController extends Controller
      * Update the status of the specified reservation.
      */
     public function update(Request $request, string $id)
-    {
-        // Validate the request to ensure 'status' is a boolean
-        $request->validate([
-            'status' => 'required|boolean',
-        ]);
+{
+    // Validate the request to ensure 'status' is a boolean
+    $request->validate([
+        'status' => 'required|boolean',
+    ]);
 
-        // Find the reservation by its ID
-        $reservation = Reservation::findOrFail($id);
+    // Find the reservation by its ID
+    $reservation = Reservation::findOrFail($id);
 
-        // Check if the reservation is active and is being canceled (status set to 0)
-        if ($reservation->status === 1 && $request->input('status') == 0) {
-            // Retrieve the event associated with this reservation
-            $event = $reservation->event;
+    // Check if the reservation is active and is being canceled (status set to 0)
+    if ($reservation->status === 1 && $request->input('status') == 0) {
+        // Retrieve the event associated with this reservation
+        $event = $reservation->event;
 
-            // Decrement the event's occupied_slots by 1
-            $event->decrement('occupied_slots');
-        }
-
-        // Update the reservation's status
-        $reservation->status = $request->input('status');
-
-        // Save changes to the reservation
-        $reservation->save();
-
-        // Redirect back to reservation list with success message
-        return redirect()->route('reservations.index');
+        // Decrement the event's occupied_slots by 1
+        $event->decrement('occupied_slots');
     }
+
+    // Update the reservation's status
+    $reservation->status = $request->input('status');
+
+    // Save changes to the reservation
+    $reservation->save();
+
+    // Check for the associated user and notify them
+    if ($reservation->user) {  // Make sure the booking has a user
+        $reservation->user->notify(new UserCancelledReservation($reservation));  // Notify the user
+        $usersNotified = 1;  // Only one user is notified since it's a single reservation
+    } else {
+        $usersNotified = 0;
+    }
+
+    // If no user was notified
+    if ($usersNotified === 0) {
+        Log::info("No hay usuarios que hayan realizado tal reserva con ID {$reservation->id}.");
+    }
+
+    // Redirect back to reservation list with success message
+    return redirect()->route('reservations.index');
+}
+
 
     /**
      * Remove the specified reservation from storage.
