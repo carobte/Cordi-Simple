@@ -15,7 +15,8 @@
     <div class="flex justify-center items-center flex-wrap gap-5 overflow-x-auto max-w-7xl mx-auto w-screen">
 
         @forelse($events as $event)
-            <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
+            <div
+                class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer">
                 <div class="p-4">
                     <!-- Display event details -->
                     <p class="text-slate-800 text-xl font-semibold capitalize">{{ $event->id }}. {{ $event->name }}</p>
@@ -58,8 +59,16 @@
                                 class="inline-block m-0 event-delete-form" data-event-id="{{ $event->id }}">
                                 @csrf
                                 @method('PUT') <!-- We use PUT because we're updating the status -->
-                                <button type="submit"
-                                    class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar</button>
+                                @if ($event->status == '1')
+                                    <button type="submit"
+                                        class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">Cancelar
+                                    </button>
+                                @else
+                                <a href="#" class="bg-gray-400 px-3 py-2 text-white rounded cursor-not-allowed">
+                                    Cancelado
+                                </a>
+                                @endif
+
                             </form>
                         @elseif(Auth::user()->rol->name == 'general user')
                             @php
@@ -80,7 +89,8 @@
                                 <span class="bg-yellow-500 px-3 py-2 text-white rounded cursor-not-allowed">Agotado</span>
                             @else
                                 <!-- If event has available slots and is not canceled, allow user to create a reservation -->
-                                @if ($event->status) <!-- Only show "Reserve" button if event is active -->
+                                @if ($event->status)
+                                    <!-- Only show "Reserve" button if event is active -->
                                     <a href="{{ route('reservations.create', ['event_id' => $event->id]) }}"
                                         class="bg-violet-500 px-3 py-2 text-white rounded hover:bg-violet-600">Reservar</a>
                                 @endif
@@ -109,7 +119,8 @@
 
                 const eventId = this.getAttribute('data-event-id'); // Get the event ID
                 Swal.fire({
-                    title: "¿Estás seguro que quieres cancelar el evento " + eventId + "?",
+                    title: "¿Estás seguro que quieres cancelar el evento " + eventId +
+                        "?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",

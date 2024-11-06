@@ -8,6 +8,8 @@ use App\Models\Reservation;
 use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\UserCancelledReservation;
+use Illuminate\Support\Facades\Log;
+
 
 class ReservationController extends Controller
 {
@@ -143,20 +145,13 @@ class ReservationController extends Controller
     // Check for the associated user and notify them
     if ($reservation->user) {  // Make sure the booking has a user
         $reservation->user->notify(new UserCancelledReservation($reservation));  // Notify the user
-        $usersNotified = 1;  // Only one user is notified since it's a single reservation
     } else {
-        $usersNotified = 0;
-    }
-
-    // If no user was notified
-    if ($usersNotified === 0) {
         Log::info("No hay usuarios que hayan realizado tal reserva con ID {$reservation->id}.");
     }
 
-    // Redirect back to reservation list with success message
+      // Redirect back to reservation list with success message
     return redirect()->route('reservations.index');
 }
-
 
     /**
      * Remove the specified reservation from storage.

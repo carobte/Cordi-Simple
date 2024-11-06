@@ -9,9 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/events', function () {
+    return view('events');
+})->middleware(['auth', 'verified'])->name('events.index');
 
 Route::middleware('auth')->group(function () {
 

@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notification;
 class UserCancelledReservation extends Notification
 {
     use Queueable;
+    protected $reservation;
 
     /**
      * Create a new notification instance.
@@ -34,16 +35,13 @@ class UserCancelledReservation extends Notification
 
         // Create the email message
         return (new MailMessage)
-            ->subject('Reserva cancelada con éxito')
-            ->greeting('¡Hola!')
-            ->line('Te informamos que la reserva "' . $this->reservation->event->name . '" ha sido cancelada.')
-            ->line('Lamentamos que hayas tenido que cancelar tu reserva, te esperamos en un próximo evento')
+            ->subject('Tu reserva ha sido cancelada')
+            ->greeting('¡Hola ' . $this->reservation->user->name . "!")
+            ->line('Te informamos que la reserva "' . ucfirst( $this->reservation->event->name). '" ha sido cancelada.')
+            ->line('Lamentamos los inconvenientes que esto te pueda generar, te esperamos en un próximo evento')
             ->line('Nuestros canales de comunicación están abiertos para tu comodidad.')
             ->action('Ver detalles de la  reserva', route('reservations.index'))
-            ->salutation('¡Gracias por tu comprensión y apoyo!');
-
-
-
+            ->salutation('¡Gracias por tu comprensión!');
     }
 
     /**
