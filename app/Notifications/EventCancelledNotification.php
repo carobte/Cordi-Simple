@@ -28,7 +28,7 @@ class EventCancelledNotification extends Notification
     /**
      * Get the notification's mail representation.
      *
-     * This method builds the email that will be sent to the notifiable user. 
+     * This method builds the email that will be sent to the notifiable user.
      * It includes the event name, a cancellation message, and an optional logo (encoded in base64).
      *
      * @param  mixed  $notifiable  The user or model that is being notified.
